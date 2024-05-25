@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: xxx-starter
+Bundle-Name: xxx-starter
+Bundle-Version: 1.0.0
+Bundle-Vendor: 504077441@qq.com
+

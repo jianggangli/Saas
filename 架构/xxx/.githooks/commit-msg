@@ -1,0 +1,30 @@
+#!/bin/sh
+
+COMMIT_MSG="$(cat $1)"
+LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+
+if test "$COMMIT_MSG" = "$LAST_COMMIT_MESSAGE"; then
+    echo -e "\033[33m 警告: commit内容与最近一次重复，您应该尽量避免 \033[0m"
+fi
+
+cd $(pwd)/.githooks
+#javac -encoding utf-8 HookCommitMessageCheck.java
+#jar cfvm HookCommitMessageCheck.jar  MANIFEST.MF  *.class
+chmod +x *.jar
+java -jar HookCommitMessageCheck.jar "$COMMIT_MSG"
+ret=$?
+
+
+if [ "$ret" == 1 ]
+then
+	echo -e "\033[31m 提交失败: commit内容必须满足规范,参考↓ \033[0m"
+	echo -e "\033[31m       例: Add：xxx功能，具体功能点描述 \033[0m"
+	echo -e "\033[31m           ---------------------------- \033[0m"
+	echo -e "\033[31m           |Add：新功能               | \033[0m"
+	echo -e "\033[31m           |Upd：新功能的完善，补充   | \033[0m"
+	echo -e "\033[31m           |Fix：修补bug，缺陷，优化  | \033[0m"
+	echo -e "\033[31m           |Refactor：重构(非功能调整)| \033[0m"
+	echo -e "\033[31m           ---------------------------- \033[0m"
+	
+    exit 1
+fi
